@@ -1,0 +1,7 @@
+<div>
+  <div class="box_wrap">
+    <ul>
+      <li *ngFor="let item of arrNumber" (click)="selectOne(item)" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
+    </ul>
+  </div>
+</div>
