@@ -30,7 +30,24 @@ export class CubeComponent implements OnInit {
     [4, 8, 12, 16, 20]
   ];
 
-  constructor() { }
+  arrBingo = [
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+
+    [false, false, false, false, false],
+    [false, false, false, false, false]
+  ];
+
+  constructor() {}
 
   shuffle(a){
     for(let i = a.length - 1; i > 0; i--){
@@ -41,7 +58,7 @@ export class CubeComponent implements OnInit {
   }
   ngOnInit() {
     var myArray = [];
-    for(let i = 1; i<=25; i++){
+    for(let i = 0; i<25; i++){
       myArray.push(i);
     }
     this.shuffle(myArray);
@@ -56,17 +73,36 @@ export class CubeComponent implements OnInit {
   }
   selectOne(item){
     if(item.isSelected)  return;
-    console.log(item.num, this.user);
     this.arrSelectedChange.emit(item.num);
     this.arrNumber[item.idx].isSelected = true;
-    console.log(item.num, this.user, this.arrNumber);
+    //console.log(item.num, this.user, this.arrNumber);
   }
   
   checkLine(){
+    let bingoCount = 0;
     for(let i = 0; i<this.arrLine.length; i++){
-      for(let j = 0; j<this.arrNumber.length; j++){
-        //for(let k = 0;)
+      let count = 0;
+      for(let j = 0; j<5; j++){
+        let isSelected = false;
+        if(this.arrLine[i][j]){
+          isSelected = this.arrNumber[this.arrLine[i][j]].isSelected;
+        }
+        if(isSelected){
+          count++;
+        }
+        this.arrBingo[i][j] = isSelected;
+      }
+      if(count == 5){
+        bingoCount++;
       }
     }
+    console.log('bingoCount ' + bingoCount);
+    console.log(this.arrNumber);
+    console.log(this.arrBingo);
+    if(bingoCount >= 5){
+      alert('bingo! user ' + this.user);
+      return true;
+    }
+    return false;
   }
 }
