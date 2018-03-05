@@ -1,19 +1,19 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="wrap">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
+  <h2>
+    {{title}}
+  </h2>
 </div>
-<h2>
+<h3>
   Players
-</h2>
-<h3>
+</h3>
+<h4>
   COM 1
-</h3>
-<cube [user]="1" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></cube>
+</h4>
+<app-cube [user]="1" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></app-cube>
 
-<h3>
+<h4>
   COM 2
-</h3>
-<cube [user]="2" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></cube>
+</h4>
+<app-cube [user]="2" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></app-cube>
 

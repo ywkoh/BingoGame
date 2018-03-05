@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'cube',
+  selector: 'app-cube',
   templateUrl: './cube.component.html',
   styleUrls: ['./cube.component.css']
 })
 export class CubeComponent implements OnInit {
-  
+
   @Input() user = '';
   @Input() arrSelected = [];
   @Output()
@@ -49,21 +49,21 @@ export class CubeComponent implements OnInit {
 
   constructor() {}
 
-  shuffle(a){
-    for(let i = a.length - 1; i > 0; i--){
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
   }
   ngOnInit() {
-    var myArray = [];
-    for(let i = 0; i<25; i++){
+    const myArray = [];
+    for (let i = 0; i < 25; i++) {
       myArray.push(i);
     }
     this.shuffle(myArray);
-    for(let i = 0; i<myArray.length; i++){
-      let obj = {
+    for (let i = 0; i < myArray.length; i++) {
+      const obj = {
         num : myArray[i],
         isSelected : false,
         idx : i
@@ -71,35 +71,37 @@ export class CubeComponent implements OnInit {
       this.arrNumber.push(obj);
     }
   }
-  selectOne(item){
-    if(item.isSelected)  return;
+  selectOne(item) {
+    if (item.isSelected) {
+      return;
+    }
     this.arrSelectedChange.emit(item.num);
     this.arrNumber[item.idx].isSelected = true;
-    //console.log(item.num, this.user, this.arrNumber);
+    // console.log(item.num, this.user, this.arrNumber);
   }
-  
-  checkLine(){
+
+  checkLine() {
     let bingoCount = 0;
-    for(let i = 0; i<this.arrLine.length; i++){
+    for (let i = 0; i < this.arrLine.length; i++) {
       let count = 0;
-      for(let j = 0; j<5; j++){
+      for (let j = 0; j < 5; j++) {
         let isSelected = false;
-        if(this.arrLine[i][j]){
+        if (this.arrLine[i][j]) {
           isSelected = this.arrNumber[this.arrLine[i][j]].isSelected;
         }
-        if(isSelected){
+        if (isSelected) {
           count++;
         }
         this.arrBingo[i][j] = isSelected;
       }
-      if(count == 5){
+      if (count === 5) {
         bingoCount++;
       }
     }
     console.log('bingoCount ' + bingoCount);
     console.log(this.arrNumber);
     console.log(this.arrBingo);
-    if(bingoCount >= 5){
+    if (bingoCount >= 5) {
       alert('bingo! user ' + this.user);
       return true;
     }
