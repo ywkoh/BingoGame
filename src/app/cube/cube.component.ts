@@ -86,7 +86,7 @@ export class CubeComponent implements OnInit {
       let count = 0;
       for (let j = 0; j < 5; j++) {
         let isSelected = false;
-        if (this.arrLine[i][j]) {
+        if (this.arrLine[i][j] != null) {
           isSelected = this.arrNumber[this.arrLine[i][j]].isSelected;
         }
         if (isSelected) {
