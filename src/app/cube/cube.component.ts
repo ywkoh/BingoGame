@@ -47,6 +47,14 @@ export class CubeComponent implements OnInit {
     [false, false, false, false, false]
   ];
 
+  arrScore = [
+    /*{
+      orgScore: 3,
+      score: 3,
+      arrLine: [0, 5, 10]
+    },*/
+  ];
+
   constructor() {}
 
   shuffle(a) {
@@ -70,6 +78,24 @@ export class CubeComponent implements OnInit {
       };
       this.arrNumber.push(obj);
     }
+    for (let i = 0; i < 25; i++) {
+      let obj;
+      let count = 0;
+      const arrLine = [];
+      for (let j = 0; j < this.arrLine.length; j++) {
+        if (this.arrLine[j].indexOf(i) > -1) {
+          count++;
+          arrLine.push(j);
+        }
+      }
+      obj = {
+        count: count,
+        score: count,
+        arrLine: arrLine
+      };
+      this.arrScore.push(obj);
+    }
+    console.log(this.arrScore);
   }
   selectOne(item) {
     if (item.isSelected) {
@@ -78,6 +104,21 @@ export class CubeComponent implements OnInit {
     this.arrSelectedChange.emit(item.num);
     this.arrNumber[item.idx].isSelected = true;
     // console.log(item.num, this.user, this.arrNumber);
+  }
+
+  calcScore() {
+    for (let i = 0; i < this.arrScore.length; i++) {
+      let count = 0;
+      const obj = this.arrScore[i];
+      for (let j = 0; j < obj.arrLine.length; j++) {
+        for (let k = 0; k < 5; k++) {
+          if (this.arrBingo[j][k]) {
+            count++;
+          }
+        }
+      }
+      obj.score = obj.count + count;
+    }
   }
 
   checkLine() {
@@ -98,9 +139,10 @@ export class CubeComponent implements OnInit {
         bingoCount++;
       }
     }
-    console.log('bingoCount ' + bingoCount);
-    console.log(this.arrNumber);
-    console.log(this.arrBingo);
+    this.calcScore();
+    // console.log('bingoCount ' + bingoCount);
+    console.log(this.arrScore);
+    // console.log(this.arrBingo);
     if (bingoCount >= 5) {
       alert('bingo! user ' + this.user);
       return true;
