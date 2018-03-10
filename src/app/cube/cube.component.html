@@ -1,7 +1,13 @@
-<div [ngClass]="{'bingo':checkLine()}">
-  <div class="box_wrap">
+<div>
+  <div *ngIf="showNum" class="box_wrap user">
     <ul>
       <li *ngFor="let item of arrNumber" (click)="selectOne(item)" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
     </ul>
   </div>
+  <div *ngIf="!showNum" class="box_wrap com">
+    <ul>
+      <li *ngFor="let item of arrNumber" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
+    </ul>
+  </div>
+  <p>빙고 카운트: {{bingoCount}}</p>
 </div>

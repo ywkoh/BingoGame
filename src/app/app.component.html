@@ -8,12 +8,12 @@
   Players
 </h3>
 <h4>
-  COM 1
+  USER
 </h4>
-<app-cube [user]="1" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></app-cube>
+<app-cube #userCube [user]="'human'" [showNum]="true" [arrSelected]="arrSelected" (userSelect)="userSelect($event)"></app-cube>
 
 <h4>
-  COM 2
+  COM
 </h4>
-<app-cube [user]="2" [arrSelected]="arrSelected" (arrSelectedChange)="arrSelectedChange($event)"></app-cube>
+<app-cube #comCube [user]="'computer'" [showNum]="false" [arrSelected]="arrSelected"></app-cube>
 
