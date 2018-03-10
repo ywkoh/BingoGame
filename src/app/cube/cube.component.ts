@@ -10,6 +10,8 @@ export class CubeComponent implements OnInit {
   @Input() user = '';
   // 숫자를 보여줄지 여부
   @Input() showNum = false;
+  // 라인별 빙고 자료
+  @Input() arrMap = [];
   // 선택된 숫자 배열 - 부모
   @Input() arrSelected = [];
   
@@ -18,32 +20,18 @@ export class CubeComponent implements OnInit {
   
   // 섞인 번호 배열
   arrNumber = [];
-  // 라인별 빙고 자료
-  arrLine = [
-    [0, 1, 2, 3, 4],
-    [5, 6, 7, 8, 9],
-    [10, 11, 12, 13, 14],
-    [15, 16, 17, 18, 19],
-    [20, 21, 22, 23, 24],
-
-    [0, 5, 10, 15, 20],
-    [1, 6, 11, 16, 21],
-    [2, 7, 12, 17, 22],
-    [3, 8, 13, 18, 23],
-    [4, 9, 14, 19, 24],
-
-    [0, 6, 12, 18, 24],
-    [4, 8, 12, 16, 20]
-  ];
   // 선택된 셀 배열
   arrBingo = [];
   // 셀의 실시간 점수 배열
   arrScore = [];
   // 빙고 카운트
   bingoCount = 0;
+  // 한 줄 셀 갯수
+  cellCount = 0;
 
   constructor() {}
-
+  
+  // 배열 섞기
   shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -53,16 +41,17 @@ export class CubeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cellCount = this.arrMap[0].length;
     // 선택된 셀 배열 초기화
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < this.arrMap.length; i++) {
       this.arrBingo[i] = [];
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < this.cellCount; j++) {
         this.arrBingo[i].push(false);
       }
     }
     // 숫자 섞어서 배열만들기
     const myArray = [];
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < this.cellCount * this.cellCount; i++) {
       myArray.push(i);
     }
     this.shuffle(myArray);
@@ -75,12 +64,12 @@ export class CubeComponent implements OnInit {
       this.arrNumber.push(obj);
     }
     // 점수 배열 만들기
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < this.cellCount * this.cellCount; i++) {
       let obj;
       let count = 0;
       const arrLine = [];
-      for (let j = 0; j < this.arrLine.length; j++) {
-        if (this.arrLine[j].indexOf(i) > -1) {
+      for (let j = 0; j < this.arrMap.length; j++) {
+        if (this.arrMap[j].indexOf(i) > -1) {
           count++;
           arrLine.push(j);
         }
@@ -99,7 +88,7 @@ export class CubeComponent implements OnInit {
     if (item.isSelected) {
       return;
     }
-    this.userSelect.emit({num: item.num, emitter: this.user});
+    this.userSelect.emit({num: item.num});
   }
   
   // 점수 합산하기
@@ -108,7 +97,7 @@ export class CubeComponent implements OnInit {
       let count = 0;
       const obj = this.arrScore[i];
       for (let j = 0; j < obj.arrLine.length; j++) {
-        for (let k = 0; k < 5; k++) {
+        for (let k = 0; k < this.cellCount; k++) {
           if (this.arrBingo[j][k]) {
             count++;
           }
@@ -127,33 +116,28 @@ export class CubeComponent implements OnInit {
     }
 
     this.bingoCount = 0;
-    for (let i = 0; i < this.arrLine.length; i++) {
+    for (let i = 0; i < this.arrMap.length; i++) {
       let count = 0;
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < this.cellCount; j++) {
         let isSelected = false;
-        if (this.arrLine[i][j] != null) {
-          isSelected = this.arrNumber[this.arrLine[i][j]].isSelected;
+        if (this.arrMap[i][j] != null) {
+          isSelected = this.arrNumber[this.arrMap[i][j]].isSelected;
         }
         if (isSelected) {
           count++;
         }
         this.arrBingo[i][j] = isSelected;
       }
-      if (count === 5) {
+      if (count === this.cellCount) {
         this.bingoCount++;
       }
     }
-    //console.log('arrBingo ' + this.arrBingo);
-    //console.log('user ' + this.user);
     this.calcScore();
-    // console.log('bingoCount ' + bingoCount);
-    //console.log(this.arrScore);
-    // console.log(this.arrBingo);
   }
 
   // 게임 빙고 됬는지 확인
   checkBingo() {
-    if (this.bingoCount >= 5) {
+    if (this.bingoCount >= this.cellCount) {
       console.log('bingo! user ' + this.user);
       return true;
     }

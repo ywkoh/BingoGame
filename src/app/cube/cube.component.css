@@ -1,3 +1,10 @@
+
+.box_wrap{
+    padding-top: 5px
+}
+.box_wrap.bingo{
+    background: lightgreen;
+}
 ul{
     list-style-type: none;
     width: 160px;
