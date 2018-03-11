@@ -14,7 +14,7 @@ export class CubeComponent implements OnInit {
   @Input() arrMap = [];
   // 선택된 숫자 배열 - 부모
   @Input() arrSelected = [];
-  
+
   // 사용자가 선택하는 이벤트
   @Output() userSelect: EventEmitter<Object> = new EventEmitter<Object>();
   
@@ -28,6 +28,8 @@ export class CubeComponent implements OnInit {
   bingoCount = 0;
   // 한 줄 셀 갯수
   cellCount = 0;
+  // click 가능여부
+  clickable = true;
 
   constructor() {}
   
@@ -138,10 +140,10 @@ export class CubeComponent implements OnInit {
   // 게임 빙고 됬는지 확인
   checkBingo() {
     if (this.bingoCount >= this.cellCount) {
-      console.log('bingo! user ' + this.user);
-      return true;
+      console.log('bingo! ' + this.user);
+      return {boo: true, user: this.user};
     }
-    return false;
+    return {boo: false, user: ''};
   }
   
   // 점수 높은 셀찾기

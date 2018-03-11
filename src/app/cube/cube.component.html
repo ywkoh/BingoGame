@@ -1,14 +1,13 @@
-<div class="box_wrap" [ngClass]="{bingo: bingoCount === cellCount}">
-  <p>이름: {{user}}</p>
+<div class="box_wrap" [ngClass]="{bingo: bingoCount >= cellCount}">
+  <p>이름: {{user}}, 빙고 카운트: {{bingoCount}}</p>
   <div *ngIf="showNum" class="user">
     <ul [ngStyle]="{'width': 30*cellCount + 'px'}">
-      <li *ngFor="let item of arrNumber" (click)="bingoCount === cellCount || selectOne(item)" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
+      <li *ngFor="let item of arrNumber" (click)="bingoCount >= cellCount || !clickable || selectOne(item)" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
     </ul>
   </div>
   <div *ngIf="!showNum" class="com">
     <ul [ngStyle]="{'width': 30*cellCount + 'px'}">
-      <li *ngFor="let item of arrNumber" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">{{item.num}}</li>
+      <li *ngFor="let item of arrNumber" [ngClass]="{'selected' :arrSelected.indexOf(item.num) > -1}">?</li>
     </ul>
   </div>
-  <p>빙고 카운트: {{bingoCount}}</p>
 </div>

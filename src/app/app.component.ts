@@ -1,4 +1,4 @@
-import { Component, Output, ViewChild } from '@angular/core';
+import { Component, Output, OnInit, ViewChild } from '@angular/core';
 import { EventEmitter } from 'events';
 import { CubeComponent } from './cube/cube.component';
 
@@ -8,7 +8,7 @@ import { CubeComponent } from './cube/cube.component';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit{
   
   // 사용자 큐브 콤포넌트
   @ViewChild('userCube')  userCube: CubeComponent;
@@ -20,6 +20,10 @@ export class AppComponent {
   arrSelected = [];
   // 컴퓨터 계산 시간
   comTime = 1000;
+  // game over
+  gameOver = false;
+  // win user
+  winUser = "";
   
   // 5 * 5 Map
   arrMap = [
@@ -66,34 +70,62 @@ export class AppComponent {
     [8, 16, 24, 32, 40, 48, 56, 64, 72]
   ];*/
 
+  ngOnInit() {
+  }
+
   // 사용자가 선택했을때의 메서드
   userSelect(e) {
     let scope = this;
+    let gameOver1 = false;
+    let gameOver2 = false;
+
     if (this.arrSelected.indexOf(e) > -1) {
       return;
     }
     this.arrSelected.push(e.num);
     this.userCube.checkLine();
+    const obj = this.userCube.checkBingo();
+    gameOver1 = this.userCube.clickable = obj.boo;
+    this.winUser += obj.user;
+
+    this.comCube.checkLine();
+    const obj2 = this.comCube.checkBingo();
+    gameOver2 = obj2.boo;
+    this.winUser += (this.winUser ? ', ' : '') + obj2.user;
     
-    // 빙고이면 컴퓨터는 진행을 멈추고 아니면 컴퓨터 차례 진행
-    if(!this.userCube.checkBingo()){
+    if(gameOver1 || gameOver2){
+      this.gameOver = true;
+    }else{
+       // 빙고아니면 컴퓨터 차례 진행
       setTimeout(function(){
         scope.comSelect(scope.comCube.highScoreItem());
       }, this.comTime);
     }
-    this.comCube.checkLine();
-    this.comCube.checkBingo();
-    console.log('user select');
+    console.log(this.userCube.user + ' select');
   }
   
   // 컴퓨터가 선택했을 때의 메서드
   comSelect(e) {
+    let gameOver1 = false;
+    let gameOver2 = false;
+
     this.arrSelected.push(e.num);
     
     this.comCube.checkLine();
-    this.comCube.checkBingo();
+    const obj = this.comCube.checkBingo();
+    gameOver1 = obj.boo;
+    this.winUser += obj.user;
+
     this.userCube.checkLine();
-    this.userCube.checkBingo();
-    console.log('com select');
+    const obj2 = this.userCube.checkBingo();
+    gameOver2 = obj2.boo;
+    this.winUser += (this.winUser ? ', ' : '') + obj2.user;
+
+    if(gameOver1 || gameOver2){
+      this.gameOver = true;
+    }else{
+      this.userCube.clickable = true;
+    }
+    console.log(this.comCube.user + ' select');
   }
 }

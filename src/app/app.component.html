@@ -4,9 +4,9 @@
     {{title}}
   </h3>
 </div>
-<h4>
-  Players
-</h4>
+<p *ngIf="gameOver">
+  Game Over. {{winUser}} Win! ^^
+</p>
 <app-cube #userCube [user]="'human'" [arrMap]="arrMap" [showNum]="true" [arrSelected]="arrSelected" (userSelect)="userSelect($event)"></app-cube>
 <app-cube #comCube [user]="'computer'" [arrMap]="arrMap" [showNum]="false" [arrSelected]="arrSelected"></app-cube>
 
